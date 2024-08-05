@@ -1,10 +1,11 @@
 import uvicorn
-from fastapi import FastAPI, Path
+from fastapi import FastAPI
 from pydantic import EmailStr, BaseModel
-from typing import Annotated
 
+from items_views import router as items_router
 
 app = FastAPI()
+app.include_router(items_router)
 
 
 class CreateUser(BaseModel):
@@ -15,15 +16,6 @@ class CreateUser(BaseModel):
 @app.get("/")
 def hello_index():
     return {"success": 200, "msg": "Hello World"}
-
-
-@app.get("/items/{item_id}")
-def get_item(item_id: Annotated[int, Path(ge=1, lt=1_000_000)]):
-    return {
-        "item": {
-            "id": item_id
-        },
-    }
 
 
 @app.get("/hello/")
