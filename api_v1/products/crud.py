@@ -7,6 +7,7 @@ from core.models import Product
 
 
 async def get_products(session: AsyncSession) -> list[Product]:
+    # Read all
     stmt = select(Product).order_by(Product.id)
     result: Result = await session.execute(stmt)
     products = result.scalars().all()
@@ -14,10 +15,12 @@ async def get_products(session: AsyncSession) -> list[Product]:
 
 
 async def get_product(session: AsyncSession, product_id: int) -> Product | None:
+    # Read one
     return await session.get(Product, product_id)
 
 
 async def create_product(
+        # Create
         session: AsyncSession,
         product_in: ProductCreate
 ) -> Product:
@@ -39,3 +42,11 @@ async def update_product(
         setattr(product, name, value)
     await session.commit()
     return product
+
+
+async def delete_product(
+        # Delete
+        session: AsyncSession,
+        product: Product,
+) -> None:
+    await session.delete(product)
