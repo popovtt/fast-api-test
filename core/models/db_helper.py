@@ -21,6 +21,7 @@ class DatabaseHelper:
         )
 
     def get_scoped_session(self):
+        # При кожному зверненні у вьюшці, створюється нова сесія
         session = async_scoped_session(
             session_factory=self.session_factory,
             scopefunc=current_task,
@@ -28,7 +29,7 @@ class DatabaseHelper:
         return session
 
     async def scoped_session_dependency(self) -> AsyncSession:
-        # Формує майбутні сесії по запросу
+        # Коли працюємо з одною скоупд сесією
         session = self.get_scoped_session()
         yield session
         # await session.remove()

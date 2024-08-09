@@ -50,3 +50,4 @@ async def delete_product(
         product: Product,
 ) -> None:
     await session.delete(product)
+    await session.commit()
